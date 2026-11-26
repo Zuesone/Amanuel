@@ -1,0 +1,35 @@
+using UnityEngine;
+
+public class TeslaTowerZone : MonoBehaviour
+{
+    [Header("Grid Settings")]
+    public float rechargeRate = 25f; // Energy restored per second
+    public bool isTowerActive = true;
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (!isTowerActive) return;
+
+        if (other.CompareTag("Player"))
+        {
+            ThomasController thomas = other.GetComponent<ThomasController>();
+            if (thomas != null)
+            {
+                thomas.isInGridZone = true;
+                thomas.RechargeEnergy(rechargeRate * Time.deltaTime);
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            ThomasController thomas = other.GetComponent<ThomasController>();
+            if (thomas != null)
+            {
+                thomas.isInGridZone = false;
+            }
+        }
+    }
+}
